@@ -8,7 +8,7 @@ public class ChatRequestsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_chat);
+        setContentView(R.layout.activity_chat_requests);
     }
 
 }

@@ -13,17 +13,13 @@ import android.widget.TextView;
  */
 public class HomeActivity extends AppCompatActivity {
 
-    private static final String EXTRA_PROTOCOL_VERSION = "com.facebook.orca.extra.PROTOCOL_VERSION";
-    private static final String EXTRA_APP_ID = "com.facebook.orca.extra.APPLICATION_ID";
-    private static final int PROTOCOL_VERSION = 20150314;
-    private static final String YOUR_APP_ID = "197158447313911";
-    private static final int SHARE_TO_MESSENGER_REQUEST_CODE = 1;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        String username = intent.getStringExtra(SignInActivity.USERNAME);
+        username = intent.getStringExtra(SignInActivity.USERNAME);
         Resources res = getResources();
         String text = String.format(res.getString(R.string.welcome_text), username);
         setContentView(R.layout.activity_home);
@@ -42,15 +38,14 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void openShareIntent(View view) {
-        String mimeType = "text/*";
+        String mimeType = "text/plain";
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setPackage("com.facebook.orca");
         intent.setType(mimeType);
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("Call me on WhisPeerer! My username is" + SignInActivity.USERNAME));
-        intent.putExtra(EXTRA_PROTOCOL_VERSION, PROTOCOL_VERSION);
-        intent.putExtra(EXTRA_APP_ID, YOUR_APP_ID);
-
-        this.startActivityForResult(intent, SHARE_TO_MESSENGER_REQUEST_CODE);
-
+        if(username != null) {
+            intent.putExtra(Intent.EXTRA_TEXT, "Contact me on WhisPeerer! My username is: " + username);
+        } else {
+            intent.putExtra(Intent.EXTRA_TEXT, "Contact me on WhisPeerer!");
+        }
+        startActivity(Intent.createChooser(intent, "Share Your Chat"));
     }
 }

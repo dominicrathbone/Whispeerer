@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
-    android:layout_height="fill_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".StartChatActivity">
-
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".StartChatActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,30 +24,44 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/username_prompt"
-        android:id="@+id/usernamePrompt"
-        android:layout_above="@+id/usernameInput"
+        android:id="@+id/toUsernamePrompt"
+        android:layout_above="@+id/toUsernameInput"
         android:layout_alignRight="@+id/welcomeText"
         android:layout_alignEnd="@+id/welcomeText" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/usernameInput"
+        android:id="@+id/toUsernameInput"
         android:autoText="false"
         android:layout_centerVertical="true"
-        android:layout_alignRight="@+id/usernamePrompt"
-        android:layout_alignEnd="@+id/usernamePrompt"
-        android:layout_alignLeft="@+id/usernamePrompt"
-        android:layout_alignStart="@+id/usernamePrompt" />
+        android:layout_alignRight="@+id/toUsernamePrompt"
+        android:layout_alignEnd="@+id/toUsernamePrompt"
+        android:layout_alignLeft="@+id/toUsernamePrompt"
+        android:layout_alignStart="@+id/toUsernamePrompt"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/go_button"
-        android:id="@+id/goButton"
+        android:text="@string/voice_chat_button"
+        android:id="@+id/voiceChatButton"
         android:textStyle="bold"
-        android:layout_alignTop="@+id/usernameInput"
-        android:layout_toRightOf="@+id/usernameInput"
-        android:layout_toEndOf="@+id/usernameInput" />
+        android:layout_below="@+id/toUsernameInput"
+        android:layout_alignLeft="@+id/toUsernameInput"
+        android:layout_alignStart="@+id/toUsernameInput"
+        android:layout_alignRight="@+id/toUsernameInput"
+        android:layout_alignEnd="@+id/toUsernameInput"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/video_chat_button"
+        android:id="@+id/videoChatButton"
+        android:textStyle="bold"
+        android:layout_below="@+id/voiceChatButton"
+        android:layout_alignLeft="@+id/voiceChatButton"
+        android:layout_alignStart="@+id/voiceChatButton"
+        android:layout_alignRight="@+id/voiceChatButton"
+        android:layout_alignEnd="@+id/voiceChatButton" />
 
 </RelativeLayout>
