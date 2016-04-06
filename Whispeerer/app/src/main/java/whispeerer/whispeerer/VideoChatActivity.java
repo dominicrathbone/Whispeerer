@@ -9,9 +9,15 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import org.webrtc.AudioTrack;
+import org.webrtc.MediaConstraints;
+import org.webrtc.PeerConnection;
+import org.webrtc.PeerConnectionFactory;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoRendererGui;
 import org.webrtc.VideoTrack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dominic on 26/03/2016.
@@ -21,6 +27,7 @@ public class VideoChatActivity extends AppCompatActivity {
     String toUsername;
     AudioTrack audioTrack;
     VideoTrack videoTrack;
+    PeerConnectionFactory peerConnectionFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,7 @@ public class VideoChatActivity extends AppCompatActivity {
         toUsername = intent.getStringExtra(StartChatActivity.TO_USERNAME);
         audioTrack = gson.fromJson(intent.getStringExtra(StartChatActivity.AUDIO_TRACK), AudioTrack.class);
         videoTrack = gson.fromJson(intent.getStringExtra(StartChatActivity.AUDIO_TRACK), VideoTrack.class);
+        peerConnectionFactory = gson.fromJson(intent.getStringExtra(StartChatActivity.PEER_CONNECTION_FACTORY), PeerConnectionFactory.class);
 
         GLSurfaceView videoView = (GLSurfaceView) findViewById(R.id.glSurfaceView);
         VideoRendererGui.setView(videoView, new Runnable() {
@@ -45,6 +53,18 @@ public class VideoChatActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        PeerConnection.Observer peerConnectionObserver = new PeerConnectionObserver();
+        List<PeerConnection.IceServer> iceServers = new ArrayList<>();
+        MediaConstraints mediaConstraints = new MediaConstraints();
+
+        iceServers.add(new PeerConnection.IceServer("stun:stun.l.google.com:19302"));
+
+        PeerConnection peerConnection = peerConnectionFactory.createPeerConnection(
+                iceServers,
+                mediaConstraints,
+                peerConnectionObserver
+        );
 
 
     }

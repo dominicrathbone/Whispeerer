@@ -11,19 +11,18 @@ import com.google.gson.Gson;
 import org.webrtc.AudioSource;
 import org.webrtc.AudioTrack;
 import org.webrtc.MediaConstraints;
-import org.webrtc.MediaStreamTrack;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.VideoCapturerAndroid;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
-
-import java.util.ArrayList;
 
 public class StartChatActivity extends AppCompatActivity {
 
     public static final String TO_USERNAME = "whispeerer.whispeerer.TO_USERNAME";
     public static final String VIDEO_TRACK = "whispeerer.whispeerer.VIDEO_TRACK";
     public static final String AUDIO_TRACK = "whispeerer.whispeerer.VIDEO_TRACK";
+    public static final String PEER_CONNECTION_FACTORY = "whispeerer.whispeerer.PEER_CONNECTION_FACTORY";
+    PeerConnectionFactory peerConnectionFactory;
 
     public enum ChatType {
         VOICE_CHAT, VIDEO_CHAT;
@@ -52,19 +51,22 @@ public class StartChatActivity extends AppCompatActivity {
     public void startChat(ChatType chatType) {
         EditText toUsernameInput = (EditText) findViewById(R.id.toUsernameInput);
         String username = toUsernameInput.getText().toString();
-        boolean connected;
+        boolean peerConnectionFactoryInitialized;
         boolean videoEnabled = false;
+
         if(chatType == ChatType.VIDEO_CHAT) {
             videoEnabled = true;
         }
-        connected = PeerConnectionFactory.initializeAndroidGlobals(
+
+        peerConnectionFactoryInitialized = PeerConnectionFactory.initializeAndroidGlobals(
                 getApplicationContext(),
                 true,
                 videoEnabled,
                 true,
                 null);
-        if(connected) {
-            PeerConnectionFactory peerConnectionFactory = new PeerConnectionFactory();
+
+        if(peerConnectionFactoryInitialized) {
+            peerConnectionFactory = new PeerConnectionFactory();
             VideoSource videoSource;
             AudioSource audioSource;
             VideoTrack outgoingVideoTrack = null;
@@ -94,7 +96,7 @@ public class StartChatActivity extends AppCompatActivity {
         }
         intent.putExtra(TO_USERNAME, username);
         intent.putExtra(AUDIO_TRACK, gson.toJson(audioTrack));
-
+        intent.putExtra(PEER_CONNECTION_FACTORY, gson.toJson(peerConnectionFactory));
         startActivity(intent);
     }
 
