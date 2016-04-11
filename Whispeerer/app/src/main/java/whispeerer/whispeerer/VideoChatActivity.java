@@ -12,6 +12,7 @@ import org.webrtc.AudioTrack;
 import org.webrtc.MediaConstraints;
 import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
+import org.webrtc.VideoCapturerAndroid;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoRendererGui;
 import org.webrtc.VideoTrack;
@@ -32,12 +33,10 @@ public class VideoChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_chat);
+        setContentView(R.layout.activity_video_chat);
         Intent intent = getIntent();
         Gson gson = new Gson();
         toUsername = intent.getStringExtra(StartChatActivity.TO_USERNAME);
-        audioTrack = gson.fromJson(intent.getStringExtra(StartChatActivity.AUDIO_TRACK), AudioTrack.class);
-        videoTrack = gson.fromJson(intent.getStringExtra(StartChatActivity.AUDIO_TRACK), VideoTrack.class);
         peerConnectionFactory = gson.fromJson(intent.getStringExtra(StartChatActivity.PEER_CONNECTION_FACTORY), PeerConnectionFactory.class);
 
         GLSurfaceView videoView = (GLSurfaceView) findViewById(R.id.glSurfaceView);
@@ -54,7 +53,8 @@ public class VideoChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        PeerConnection.Observer peerConnectionObserver = new PeerConnectionObserver();
+        Signaller signaller = new Signaller(Signaller.BASE_URI + toUsername);
+        PeerConnection.Observer peerConnectionObserver = new PeerConnectionObserver(signaller);
         List<PeerConnection.IceServer> iceServers = new ArrayList<>();
         MediaConstraints mediaConstraints = new MediaConstraints();
 
@@ -66,6 +66,6 @@ public class VideoChatActivity extends AppCompatActivity {
                 peerConnectionObserver
         );
 
-
+        signaller.setPeerConnection(peerConnection);
     }
 }

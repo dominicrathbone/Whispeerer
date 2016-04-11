@@ -26,6 +26,8 @@
         </activity>
         <activity android:name=".HomeActivity" >
         </activity>
+        <activity android:name=".IncomingCallActivity" >
+        </activity>
         <activity android:name=".StartChatActivity" >
         </activity>
         <activity android:name=".ChatRequestsActivity" >

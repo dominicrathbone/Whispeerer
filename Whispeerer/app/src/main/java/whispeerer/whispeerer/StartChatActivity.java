@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import org.webrtc.AudioSource;
 import org.webrtc.AudioTrack;
 import org.webrtc.MediaConstraints;
+import org.webrtc.MediaStream;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.VideoCapturerAndroid;
 import org.webrtc.VideoSource;
@@ -18,97 +19,59 @@ import org.webrtc.VideoTrack;
 
 public class StartChatActivity extends AppCompatActivity {
 
-    public static final String TO_USERNAME = "whispeerer.whispeerer.TO_USERNAME";
-    public static final String VIDEO_TRACK = "whispeerer.whispeerer.VIDEO_TRACK";
-    public static final String AUDIO_TRACK = "whispeerer.whispeerer.VIDEO_TRACK";
+    public static final String TO_USERNAME = "TO_USERNAME";
     public static final String PEER_CONNECTION_FACTORY = "whispeerer.whispeerer.PEER_CONNECTION_FACTORY";
-    PeerConnectionFactory peerConnectionFactory;
+    private String username;
+    private PeerConnectionFactory peerConnectionFactory;
 
     public enum ChatType {
-        VOICE_CHAT, VIDEO_CHAT;
+        VOICE_CHAT, VIDEO_CHAT
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_chat);
-
+        EditText toUsernameInput = (EditText) findViewById(R.id.toUsernameInput);
+        final String toUsername = toUsernameInput.getText().toString();
+        username = getIntent().getStringExtra(HomeActivity.USERNAME);
         findViewById(R.id.voiceChatButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startChat(ChatType.VOICE_CHAT);
+                startChat(username, toUsername, ChatType.VOICE_CHAT);
             }
         });
 
         findViewById(R.id.videoChatButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startChat(ChatType.VIDEO_CHAT);
+                startChat(username, toUsername, ChatType.VIDEO_CHAT);
             }
         });
     }
 
-    public void startChat(ChatType chatType) {
-        EditText toUsernameInput = (EditText) findViewById(R.id.toUsernameInput);
-        String username = toUsernameInput.getText().toString();
-        boolean peerConnectionFactoryInitialized;
-        boolean videoEnabled = false;
-
-        if(chatType == ChatType.VIDEO_CHAT) {
-            videoEnabled = true;
-        }
-
-        peerConnectionFactoryInitialized = PeerConnectionFactory.initializeAndroidGlobals(
-                getApplicationContext(),
-                true,
-                videoEnabled,
-                true,
-                null);
-
-        if(peerConnectionFactoryInitialized) {
-            peerConnectionFactory = new PeerConnectionFactory();
-            VideoSource videoSource;
-            AudioSource audioSource;
-            VideoTrack outgoingVideoTrack = null;
-            AudioTrack outgoingAudioTrack;
-
-            if(videoEnabled) {
-                MediaConstraints videoConstraints = new MediaConstraints();
-                videoSource = peerConnectionFactory.createVideoSource(getCamera(), videoConstraints);
-                outgoingVideoTrack = peerConnectionFactory.createVideoTrack("OUTGOING_VIDEO", videoSource);
-            }
-
-            MediaConstraints audioConstraints = new MediaConstraints();
-            audioSource = peerConnectionFactory.createAudioSource(audioConstraints);
-            outgoingAudioTrack = peerConnectionFactory.createAudioTrack("OUTGOING_AUDIO", audioSource);
-            openChatActivity(username, chatType, outgoingAudioTrack, outgoingVideoTrack);
-        }
-    }
-
-    public void openChatActivity(String username, ChatType chatType, AudioTrack audioTrack, VideoTrack videoTrack) {
+    public void startChat(String username, String toUsername, ChatType chatType) {
         Intent intent;
-        Gson gson = new Gson();
-        if(chatType == ChatType.VIDEO_CHAT) {
+        if (chatType == ChatType.VIDEO_CHAT) {
             intent = new Intent(this, VideoChatActivity.class);
-            intent.putExtra(VIDEO_TRACK, gson.toJson(videoTrack));
         } else {
             intent = new Intent(this, VoiceChatActivity.class);
         }
-        intent.putExtra(TO_USERNAME, username);
-        intent.putExtra(AUDIO_TRACK, gson.toJson(audioTrack));
-        intent.putExtra(PEER_CONNECTION_FACTORY, gson.toJson(peerConnectionFactory));
+        boolean peerConnectionFactoryInitialized = PeerConnectionFactory.initializeAndroidGlobals(
+                getApplicationContext(),
+                true,
+                false,
+                true,
+                null);
+
+        if (peerConnectionFactoryInitialized) {
+            Gson gson = new Gson();
+            peerConnectionFactory = new PeerConnectionFactory();
+            intent.putExtra(PEER_CONNECTION_FACTORY, gson.toJson(peerConnectionFactory));
+        }
+        intent.putExtra(HomeActivity.USERNAME, username);
+        intent.putExtra(TO_USERNAME, toUsername);
         startActivity(intent);
     }
-
-    public VideoCapturerAndroid getCamera() {
-        String cameraName = null;
-        if(VideoCapturerAndroid.getDeviceCount() >= 1) {
-            cameraName = VideoCapturerAndroid.getNameOfFrontFacingDevice();
-            if(cameraName == null) {
-                cameraName = VideoCapturerAndroid.getNameOfBackFacingDevice();
-            }
-        }
-        return VideoCapturerAndroid.create(cameraName);
-    }
-
 }
+

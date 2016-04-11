@@ -29,8 +29,7 @@
         android:layout_alignRight="@+id/welcomeText"
         android:layout_alignEnd="@+id/welcomeText"
         android:layout_alignLeft="@+id/welcomeText"
-        android:layout_alignStart="@+id/welcomeText"
-        android:onClick="openStartChatActivity"/>
+        android:layout_alignStart="@+id/welcomeText" />
 
     <Button
         android:layout_width="wrap_content"
@@ -41,8 +40,7 @@
         android:layout_alignLeft="@+id/startChat"
         android:layout_alignStart="@+id/startChat"
         android:layout_alignRight="@+id/startChat"
-        android:layout_alignEnd="@+id/startChat"
-        android:onClick="openChatRequestsActivity"/>
+        android:layout_alignEnd="@+id/startChat"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -53,7 +51,6 @@
         android:layout_alignLeft="@+id/chatRequests"
         android:layout_alignStart="@+id/chatRequests"
         android:layout_alignRight="@+id/chatRequests"
-        android:layout_alignEnd="@+id/chatRequests"
-        android:onClick="openShareIntent" />
+        android:layout_alignEnd="@+id/chatRequests" />
 
 </RelativeLayout>

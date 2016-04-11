@@ -26,8 +26,7 @@
         android:id="@+id/goButton"
         android:layout_alignTop="@+id/usernameInput"
         android:layout_toRightOf="@+id/usernameInput"
-        android:layout_toEndOf="@+id/usernameInput"
-        android:onClick="openHomeActivity"/>
+        android:layout_toEndOf="@+id/usernameInput" />
 
 
     <EditText

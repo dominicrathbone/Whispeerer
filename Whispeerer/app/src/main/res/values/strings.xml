@@ -4,6 +4,9 @@
     <string name="to_username_prompt">Enter their username:</string>
     <string name="go_button">Go</string>
     <string name="welcome_text">Welcome, %1$s!</string>
+    <string name="from_username_text">%1$s is calling!</string>
+    <string name="accept_button">Accept</string>
+    <string name="decline_button">Decline</string>
     <string name="start_chat_text">Start Chat</string>
     <string name="start_chat_button">Start Chat</string>
     <string name="chat_requests_button">Chat Requests</string>
