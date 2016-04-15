@@ -38,12 +38,10 @@ public class Signaller extends Observable {
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                socket.emit("foo", "hi");
             }
         }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-
             }
         });
         socket.connect();
@@ -55,7 +53,13 @@ public class Signaller extends Observable {
 
     public void setObserver(final Observer observer) {
         this.signallerObserver = observer;
-        socket.on("caller", new Emitter.Listener() {
+        socket.on("offer", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                String offer = gson.fromJson((String) args[0], String.class);
+                signallerObserver.update(signaller, offer);
+            }
+        }).on("answer", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 String callStatus = gson.fromJson((String) args[0], String.class);

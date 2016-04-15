@@ -7,31 +7,28 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.webrtc.PeerConnection;
 
 import java.util.Observable;
 import java.util.Observer;
-
-import okhttp3.OkHttpClient;
 
 /**
  * Created by Dominic on 11/02/2016.
  */
 public class HomeActivity extends AppCompatActivity implements Observer {
 
+    public static final String SIGNALLER = "whispeerer.whispeerer.SIGNALlER";
     public static final String USERNAME = "whispeerer.whispeerer.USERNAME";
     public static final String FROM_USERNAME = "whispeerer.whispeerer.FROM_USERNAME";
+    public static final String CHAT_TYPE = "whispeerer.whispeerer.CHAT_TYPE";
     private String username;
     private Signaller signaller;
 
@@ -123,7 +120,10 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         try {
             JSONObject json = new JSONObject((String) data);
             if(json.has("from")) {
-                Intent intent = new Intent(this, IncomingCallActivity.class);
+                Intent intent = new Intent(this, IncomingChatActivity.class);
+                Gson gson = new Gson();
+                intent.putExtra(SIGNALLER, gson.toJson(signaller));
+                intent.putExtra(CHAT_TYPE, json.getString("chatType"));
                 intent.putExtra(FROM_USERNAME, json.get("from").toString());
             }
         } catch (JSONException e) {

@@ -8,25 +8,11 @@ import android.widget.EditText;
 
 import com.google.gson.Gson;
 
-import org.webrtc.AudioSource;
-import org.webrtc.AudioTrack;
-import org.webrtc.MediaConstraints;
-import org.webrtc.MediaStream;
-import org.webrtc.PeerConnectionFactory;
-import org.webrtc.VideoCapturerAndroid;
-import org.webrtc.VideoSource;
-import org.webrtc.VideoTrack;
-
 public class StartChatActivity extends AppCompatActivity {
 
     public static final String TO_USERNAME = "TO_USERNAME";
     public static final String PEER_CONNECTION_FACTORY = "whispeerer.whispeerer.PEER_CONNECTION_FACTORY";
     private String username;
-    private PeerConnectionFactory peerConnectionFactory;
-
-    public enum ChatType {
-        VOICE_CHAT, VIDEO_CHAT
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,24 +37,11 @@ public class StartChatActivity extends AppCompatActivity {
     }
 
     public void startChat(String username, String toUsername, ChatType chatType) {
-        Intent intent;
-        if (chatType == ChatType.VIDEO_CHAT) {
-            intent = new Intent(this, VideoChatActivity.class);
-        } else {
-            intent = new Intent(this, VoiceChatActivity.class);
-        }
-        boolean peerConnectionFactoryInitialized = PeerConnectionFactory.initializeAndroidGlobals(
-                getApplicationContext(),
-                true,
-                false,
-                true,
-                null);
-
-        if (peerConnectionFactoryInitialized) {
-            Gson gson = new Gson();
-            peerConnectionFactory = new PeerConnectionFactory();
-            intent.putExtra(PEER_CONNECTION_FACTORY, gson.toJson(peerConnectionFactory));
-        }
+        Intent intent = new Intent(this, OutgoingChatActivity.class);
+        Gson gson = new Gson();
+        Signaller signaller = new Signaller(Signaller.BASE_URI + toUsername);
+        intent.putExtra(HomeActivity.SIGNALLER, gson.toJson(signaller));
+        intent.putExtra(HomeActivity.CHAT_TYPE, chatType.name());
         intent.putExtra(HomeActivity.USERNAME, username);
         intent.putExtra(TO_USERNAME, toUsername);
         startActivity(intent);
