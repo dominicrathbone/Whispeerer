@@ -13,32 +13,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/from_username_text"
-        android:id="@+id/fromUsernameText"
-        android:layout_marginTop="110dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:text="@string/to_username_calling_text"
+        android:id="@+id/toUsernameCallingText"
+        android:layout_above="@+id/cancelButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="41dp" />
 
     <Button
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:text="@string/accept_button"
-        android:id="@+id/acceptButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/declineButton" />
-
-    <Button
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:text="@string/decline_button"
-        android:id="@+id/declineButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/acceptButton"
-        android:layout_alignEnd="@+id/acceptButton" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel_button"
+        android:id="@+id/cancelButton"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/toUsernameCallingText"
+        android:layout_alignStart="@+id/toUsernameCallingText"
+        android:layout_alignRight="@+id/toUsernameCallingText"
+        android:layout_alignEnd="@+id/toUsernameCallingText" />
 
 </RelativeLayout>

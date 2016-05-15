@@ -1,5 +1,8 @@
 package whispeerer.whispeerer;
 
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+
 import com.google.gson.Gson;
 
 import org.webrtc.IceCandidate;
@@ -21,13 +24,24 @@ import io.socket.emitter.Emitter;
  */
 public class Signaller extends Observable {
 
-    public static final String BASE_URI = "http://192.168.1.101";
+
+    public static Signaller outgoingChatSignaller = null;
+    public static Signaller incomingChatSignaller = null;
+    private String username;
+    private String uri;
     private Socket socket;
     private Gson gson;
     private Signaller signaller = this;
     private Observer signallerObserver;
 
-    public Signaller(String uri) {
+    public Signaller(final String username, boolean isForIncomingChats) {
+        if(isForIncomingChats) {
+            this.incomingChatSignaller = this;
+        } else {
+            this.outgoingChatSignaller = this;
+        }
+        this.username = username;
+        this.uri = ServerInfo.BASE_URL.getUri() + ":" + ServerInfo.PORT.getUri() + ServerInfo.USERS.getUri() + username;
         this.gson = new Gson();
         try {
             this.socket = IO.socket(uri);
@@ -38,10 +52,12 @@ public class Signaller extends Observable {
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
+                Log.v(username, "SOCKET CONNECTED");
             }
         }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
+                Log.v(username, "SOCKET DISCONNECTED");
             }
         });
         socket.connect();
@@ -56,14 +72,24 @@ public class Signaller extends Observable {
         socket.on("offer", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                String offer = gson.fromJson((String) args[0], String.class);
-                signallerObserver.update(signaller, offer);
+                final String json = args[0].toString();
+                ((AppCompatActivity) signallerObserver).runOnUiThread(new Runnable() {
+                    public void run() {
+                        signallerObserver.update(signaller, json);
+                        Log.v(username, "OFFER RECEIVED");
+                    }
+                });
             }
         }).on("answer", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                String callStatus = gson.fromJson((String) args[0], String.class);
-                signallerObserver.update(signaller, callStatus);
+                final String json = args[0].toString();
+                ((AppCompatActivity) signallerObserver).runOnUiThread(new Runnable() {
+                    public void run() {
+                        signallerObserver.update(signaller, json);
+                        Log.v(username, "ANSWER RECEIVED");
+                    }
+                });
             }
         });
     }
@@ -74,17 +100,27 @@ public class Signaller extends Observable {
             public void call(Object... args) {
                 IceCandidate iceCandidate = gson.fromJson((String) args[0], IceCandidate.class);
                 peerConnection.addIceCandidate(iceCandidate);
+                Log.v(username, "CANDIDATE RECEIVED");
             }
         }).on("sdp", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 SessionDescription sessionDescription = gson.fromJson((String) args[0], SessionDescription.class);
-                peerConnection.setRemoteDescription(sdpObserver, sessionDescription);
-                if(sessionDescription.type == SessionDescription.Type.OFFER) {
-                    peerConnection.createAnswer(sdpObserver, new MediaConstraints());
+                if(sessionDescription != null) {
+                    peerConnection.setRemoteDescription(sdpObserver, sessionDescription);
+                    if(sessionDescription.type == SessionDescription.Type.OFFER) {
+                        peerConnection.createAnswer(sdpObserver, new MediaConstraints());
+                    }
+                    Log.v(username, "SDP RECEIVED");
                 }
             }
         });
     }
+
+    public void disconnect() {
+        socket.disconnect();
+        Log.v(username, "SOCKET DISCONNECTED");
+    }
+
 
 }

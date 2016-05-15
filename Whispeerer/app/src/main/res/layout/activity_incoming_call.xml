@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/from_username_text"
-        android:id="@+id/fromUsernameText"
+        android:text="@string/from_username_calling_text"
+        android:id="@+id/fromUsernameCallingText"
         android:layout_marginTop="110dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -24,20 +24,22 @@
         android:layout_height="75dp"
         android:text="@string/accept_button"
         android:id="@+id/acceptButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/declineButton" />
+        android:layout_below="@+id/fromUsernameCallingText"
+        android:layout_marginTop="51dp"
+        android:layout_alignLeft="@+id/fromUsernameCallingText"
+        android:layout_alignStart="@+id/fromUsernameCallingText"
+        android:layout_alignRight="@+id/fromUsernameCallingText"
+        android:layout_alignEnd="@+id/fromUsernameCallingText" />
 
     <Button
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:text="@string/decline_button"
         android:id="@+id/declineButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_below="@+id/acceptButton"
+        android:layout_marginTop="33dp"
+        android:layout_alignLeft="@+id/acceptButton"
+        android:layout_alignStart="@+id/acceptButton"
         android:layout_alignRight="@+id/acceptButton"
         android:layout_alignEnd="@+id/acceptButton" />
 

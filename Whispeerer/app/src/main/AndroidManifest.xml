@@ -28,13 +28,14 @@
         </activity>
         <activity android:name=".IncomingChatActivity" >
         </activity>
-        <activity android:name=".StartChatActivity" >
+        <activity android:name=".OutgoingChatActivity" >
         </activity>
-        <activity android:name=".ChatRequestsActivity" >
+        <activity android:name=".StartChatActivity" >
         </activity>
         <activity android:name=".VideoChatDisplayActivity" >
         </activity>
         <activity android:name=".VoiceChatDisplayActivity" >
+            <uses-permission android:name="android.permission.RECORD_AUDIO" />
         </activity>
     </application>
 

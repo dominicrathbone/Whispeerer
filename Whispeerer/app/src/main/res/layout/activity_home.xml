@@ -15,7 +15,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/welcome_text"
         android:id="@+id/welcomeText"
-        android:layout_marginTop="118dp"
+        android:layout_marginTop="120dp"
+        android:autoText="false"
+        android:gravity="center"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -24,33 +26,20 @@
         android:layout_height="wrap_content"
         android:text="@string/start_chat_button"
         android:id="@+id/startChat"
-        android:layout_below="@+id/welcomeText"
-        android:layout_marginTop="31dp"
-        android:layout_alignRight="@+id/welcomeText"
-        android:layout_alignEnd="@+id/welcomeText"
-        android:layout_alignLeft="@+id/welcomeText"
-        android:layout_alignStart="@+id/welcomeText" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/chat_requests_button"
-        android:id="@+id/chatRequests"
-        android:layout_below="@+id/startChat"
-        android:layout_alignLeft="@+id/startChat"
-        android:layout_alignStart="@+id/startChat"
-        android:layout_alignRight="@+id/startChat"
-        android:layout_alignEnd="@+id/startChat"/>
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/shareButton"
+        android:layout_alignStart="@+id/shareButton"
+        android:layout_alignRight="@+id/shareButton"
+        android:layout_alignEnd="@+id/shareButton" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/share_button"
         android:id="@+id/shareButton"
-        android:layout_below="@+id/chatRequests"
-        android:layout_alignLeft="@+id/chatRequests"
-        android:layout_alignStart="@+id/chatRequests"
-        android:layout_alignRight="@+id/chatRequests"
-        android:layout_alignEnd="@+id/chatRequests" />
+        android:focusableInTouchMode="true"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/startChat"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

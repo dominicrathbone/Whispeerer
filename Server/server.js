@@ -2,8 +2,8 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var uuid = require('node-uuid');
 var bodyParser = require('body-parser');
+var randomString = require("randomstring");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -14,53 +14,73 @@ function User(name) {
     this.namespace = io.of(baseUrl.concat(name));
     this.name = name;
     this.id = null;
-    this.currentCaller = "";
+    this.currentGuest = "";
     this.busy = false;
     var user = this;
 
     this.namespace.on('connection', function(socket) {
-
         if(user.id == null) {
             user.id = socket.client.id;
+            console.log(user.name + " joined their room");
         }
 
-        if(user.busy == true) {
+        if(socket.client.id !== user.id && user.busy == true) {
             socket.disconnect();
-        } else {
+            console.log(user.name + "is busy...disconnecting");
+        } else if(socket.client.id !== user.id && user.busy == true) {
             user.busy = true;
+            console.log(user.name + "is free...connecting");
         }
-
-        console.log(socket.client.id + " rang user: " + user.name);
 
         socket.on('disconnect', function(){
-            if(socket.client.id == user.id) {
-                removeUser(user.id)
+            if(socket.client.id === user.id) {
+                removeUser(user.id);
+                console.log(user.name + " disconnected from their room")
             } else {
-                user.currentCaller = "";
+                console.log(user.currentGuest + " disconnected from : " + user.name);
+                user.currentGuest = "";
                 user.busy = false;
             }
-            console.log(socket.client.id + " hung up on: " + user.name);
         });
 
         socket.on('offer', function(data) {
-            var caller = JSON.parse(data);
-            user.currentCaller = caller.username;
-            socket.broadcast.emit("offer", JSON.stringify({"from": username}));
+            user.currentGuest = JSON.parse(data).from;
+            socket.broadcast.emit("offer", data);
+            console.log(user.currentGuest + " rang user: " + user.name);
         });
 
         socket.on('answer', function(data) {
-            var callStatus = JSON.parse(data);
-            if(callStatus == "DECLINED") {
-                user.currentCaller = "";
+            data = JSON.parse(data);
+            if(data.chatStatus == "DECLINED") {
+                console.log(user.name + " declined user: " + user.currentGuest);
+                user.currentGuest = "";
+            } else {
+                console.log(user.name + " accepted user: " + user.currentGuest);
             }
-            socket.broadcast.emit("answer", JSON.stringify({"callStatus": callStatus}));
+            socket.broadcast.emit("answer", data);
         });
 
-        socket.on('signal', function(signal) {
-            var parsedSignal = JSON.parse(signal);
-            console.log(parsedSignal);
+        socket.on('sdp', function(sdp) {
+            console.log("SDP");
+            console.log(sdp);
+            socket.broadcast.emit("sdp", sdp);
+        });
+
+        socket.on('candidate', function(candidate) {
+            console.log("candidate");
+            console.log(candidate);
+            socket.broadcast.emit("candidate", candidate);
         });
     });
+}
+
+function getUser(name) {
+    for(var i = 0; i < users.length; i++) {
+        if(users[i].name == name) {
+            return name;
+        }
+    }
+    return null;
 }
 
 function removeUser(id) {
@@ -71,10 +91,19 @@ function removeUser(id) {
     }
 }
 
-app.post('/user', function(req){
-    var username = req.body.username;
-    users.push(new User(username));
-    req.sendStatus(200);
+app.post('/user', function(req, res){
+    var username = randomString.generate({
+        length: 10,
+        charset: 'adcdefghjkmnopqrstuvwxyz'
+    });
+    console.log(username + " has created their room");
+    if(getUser(username) === null) {
+        users.push(new User(username));
+        res.status(201);
+        res.json({"username": username})
+    } else {
+        res.sendStatus(304);
+    }
 });
 
 http.listen(8080, function(){
