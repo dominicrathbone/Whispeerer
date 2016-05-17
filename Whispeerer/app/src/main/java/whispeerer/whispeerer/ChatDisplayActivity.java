@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.webrtc.DataChannel;
 import org.webrtc.IceCandidate;
 import org.webrtc.MediaConstraints;
@@ -17,6 +19,7 @@ import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -24,29 +27,31 @@ import java.util.List;
  */
 public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserver, PeerConnection.Observer {
 
-    private String toUsername;
+    String toUsername;
     PeerConnection peerConnection;
     private SessionDescription sessionDescription;
     Signaller signaller;
     private Gson gson;
     String username;
-    public MediaStream mediaStream;
+    MediaStream mediaStream;
+    boolean videoEnabled;
+    boolean outgoing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         gson = new Gson();
-        username = intent.getStringExtra(SignInActivity.USERNAME);
+        username = intent.getStringExtra(HomeActivity.USERNAME);
         toUsername = intent.getStringExtra(StartChatActivity.TO_USERNAME);
     }
 
     void establishChat() {
-        peerConnection = createPeerConnection();
+        peerConnection = createPeerConnection(videoEnabled);
         signaller.setPeerConnection(peerConnection, this);
     }
 
-    PeerConnection createPeerConnection() {
+    PeerConnection createPeerConnection(Boolean videoEnabled) {
         boolean peerConnectionFactoryInitialized = PeerConnectionFactory.initializeAndroidGlobals(
                 getApplicationContext(),
                 true,
@@ -60,6 +65,21 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
 
             List<PeerConnection.IceServer> iceServers = new ArrayList<>();
             MediaConstraints mediaConstraints = new MediaConstraints();
+            mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
+                    "OfferToReceiveAudio", "true"));
+            mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
+                    "OfferToReceiveVideo", videoEnabled.toString()));
+
+//            JSONObject videoConstraints = new JSONObject();
+//            try {
+//                videoConstraints.put("width", 400);
+//                videoConstraints.put("height", 800);
+//                videoConstraints.put("frameRate", 60);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//            mediaConstraints.optional.add(new MediaConstraints.KeyValuePair("video", videoConstraints.toString()));
             iceServers.add(new PeerConnection.IceServer("stun:stun.l.google.com:19302"));
 
             PeerConnection peerConnection = peerConnectionFactory.createPeerConnection(
@@ -67,7 +87,7 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
                     mediaConstraints,
                     this
             );
-            peerConnection.addStream(mediaStreamFactory.getMediaStream(false));
+            peerConnection.addStream(mediaStreamFactory.getMediaStream(videoEnabled));
             Log.v(username, "PEER CONNECTION CREATED");
             return peerConnection;
         } else {

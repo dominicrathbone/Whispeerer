@@ -23,6 +23,16 @@ public class ServerApiClient {
         }
     }
 
+    public static void checkUserExists(String username, AsyncHttpResponseHandler asyncHttpResponseHandler) {
+        try {
+            URL url = new URL(ServerInfo.BASE_URL.getUri() + ":" + ServerInfo.PORT.getUri() + ServerInfo.USERS.getUri() + username);
+            client.get(url.toExternalForm(),asyncHttpResponseHandler);
+        }
+        catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

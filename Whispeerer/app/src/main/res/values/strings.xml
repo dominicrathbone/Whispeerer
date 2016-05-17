@@ -1,21 +1,22 @@
 <resources>
     <string name="app_name">WhisPeerer</string>
-    <string name="username_prompt">Enter Username:</string>
-    <string name="to_username_prompt">Enter their username:</string>
+    <string name="start_chat">Start Chat</string>
+    <string name="username_prompt">Enter Username</string>
+    <string name="to_username_prompt">Enter their username</string>
     <string name="go_button">Go</string>
-    <string name="welcome_text">Welcome! \nYour username is: %1$s</string>
+    <string name="username_text">Session Username</string>
+    <string name="username">%1$s</string>
+    <string name="chat_type">%1$s</string>
     <string name="to_username_calling_text">Calling %1$s...</string>
     <string name="cancel_button">Cancel</string>
     <string name="from_username_calling_text">%1$s is calling!</string>
     <string name="accept_button">Accept</string>
     <string name="decline_button">Decline</string>
-    <string name="start_chat_text">Start Chat</string>
     <string name="start_chat_button">Start Chat</string>
     <string name="chat_requests_button">Chat Requests</string>
     <string name="share_button">Share username</string>
     <string name="video_chat_button">Video</string>
     <string name="voice_chat_button">Voice</string>
-    <string name="voice_chat_header_text">%1$s</string>
     <string name="disconnect_button">Disconnect</string>
     <string name="mute_button">Mute</string>
     <string name="speaker_button">Speaker</string>

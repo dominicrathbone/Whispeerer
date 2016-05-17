@@ -3,11 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".HomeActivity">
+    tools:context=".IncomingChatActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -15,32 +11,43 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/from_username_calling_text"
         android:id="@+id/fromUsernameCallingText"
-        android:layout_marginTop="110dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:textColor="@color/colorAccent"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="35dp"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
-    <Button
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:text="@string/accept_button"
-        android:id="@+id/acceptButton"
-        android:layout_below="@+id/fromUsernameCallingText"
-        android:layout_marginTop="51dp"
-        android:layout_alignLeft="@+id/fromUsernameCallingText"
-        android:layout_alignStart="@+id/fromUsernameCallingText"
-        android:layout_alignRight="@+id/fromUsernameCallingText"
-        android:layout_alignEnd="@+id/fromUsernameCallingText" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:weightSum="2"
+        style="@style/DarkContainer"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout">
 
-    <Button
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:text="@string/decline_button"
-        android:id="@+id/declineButton"
-        android:layout_below="@+id/acceptButton"
-        android:layout_marginTop="33dp"
-        android:layout_alignLeft="@+id/acceptButton"
-        android:layout_alignStart="@+id/acceptButton"
-        android:layout_alignRight="@+id/acceptButton"
-        android:layout_alignEnd="@+id/acceptButton" />
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@null"
+            android:text="@string/accept_button"
+            android:id="@+id/acceptButton"
+            android:src="@drawable/ic_check_white_48dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/decline_button"
+            android:id="@+id/declineButton"
+            android:src="@drawable/ic_close_white_48dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
 </RelativeLayout>

@@ -5,18 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.webrtc.MediaConstraints;
-import org.webrtc.MediaStream;
-import org.webrtc.PeerConnection;
 
 import java.util.Observable;
 import java.util.Observer;
+
 
 /**
  * Created by Dominic on 12/04/2016.
@@ -42,7 +39,7 @@ public class OutgoingChatActivity extends ChatActivity implements Observer {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            displayErrorDialog("Call Error", "Couldn't send offer to that user.");
+            displayAlertDialog("Call Error", "Couldn't send offer to that user.");
         }
         setContentView(R.layout.activity_outgoing_call);
 
@@ -54,10 +51,23 @@ public class OutgoingChatActivity extends ChatActivity implements Observer {
         findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    JSONObject json = new JSONObject();
+                    json.put("chatStatus", ChatStatus.CANCELLED.name());
+                    signaller.send("offer", json.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 signaller.disconnect();
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Signaller.incomingChatSignaller.setObserver(this);
     }
 
     @Override
@@ -67,11 +77,13 @@ public class OutgoingChatActivity extends ChatActivity implements Observer {
             if (json.getString("type").equals("answer")) {
                 if (json.get("chatStatus").equals(ChatStatus.ACCEPTED.name())) {
                     openChatDisplayActivity(toUsername);
+                    finish();
                 } else if (json.get("chatStatus").equals(ChatStatus.DECLINED.name())) {
                     signaller.disconnect();
-                    displayErrorDialog("Call Failed", toUsername + " is not available");
+                    displayAlertDialog("Call Failed", toUsername + " is not available");
                 }
             } else if(json.getString("type").equals("offer")) {
+                finish();
                 Intent intent = new Intent(this, IncomingChatActivity.class);
                 intent.putExtra(HomeActivity.CHAT_TYPE, json.getString("chatType"));
                 intent.putExtra(HomeActivity.FROM_USERNAME, json.getString("from"));
@@ -82,7 +94,7 @@ public class OutgoingChatActivity extends ChatActivity implements Observer {
         }
     }
 
-    void displayErrorDialog(String title, String message) {
+    void displayAlertDialog(String title, String message) {
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)

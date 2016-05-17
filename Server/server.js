@@ -45,6 +45,10 @@ function User(name) {
 
         socket.on('offer', function(data) {
             user.currentGuest = JSON.parse(data).from;
+            if(data.chatStatus == "CANCELLED") {
+                console.log(user.currentGuest + " cancelled on: " + user.name);
+                user.currentGuest = "";
+            }
             socket.broadcast.emit("offer", data);
             console.log(user.currentGuest + " rang user: " + user.name);
         });
@@ -57,7 +61,6 @@ function User(name) {
             } else {
                 console.log(user.name + " accepted user: " + user.currentGuest);
             }
-            socket.broadcast.emit("answer", data);
         });
 
         socket.on('sdp', function(sdp) {
@@ -91,10 +94,21 @@ function removeUser(id) {
     }
 }
 
+app.get('/users/:user', function(req, res){
+    var username = req.params.user;
+    if(getUser(username) !== null) {
+        console.log(username + " exists");
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(404);
+    }
+});
+
 app.post('/user', function(req, res){
     var username = randomString.generate({
         length: 10,
-        charset: 'adcdefghjkmnopqrstuvwxyz'
+        readable:true,
+        capitalization:"uppercase"
     });
     console.log(username + " has created their room");
     if(getUser(username) === null) {

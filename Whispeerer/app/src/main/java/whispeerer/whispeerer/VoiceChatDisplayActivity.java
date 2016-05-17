@@ -3,25 +3,18 @@ package whispeerer.whispeerer;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
-
-import com.google.gson.Gson;
 
 import org.webrtc.AudioTrack;
 import org.webrtc.MediaConstraints;
 import org.webrtc.MediaStream;
-import org.webrtc.PeerConnection;
-
-import java.io.IOException;
 
 /**
  * Created by Dominic on 26/03/2016.
@@ -32,30 +25,46 @@ public class VoiceChatDisplayActivity extends ChatDisplayActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice_chat);
-        Intent intent = getIntent();
-        String toUsername = intent.getStringExtra(StartChatActivity.TO_USERNAME);
 
         Resources res = getResources();
-        String text = String.format(res.getString(R.string.voice_chat_header_text), toUsername);
-        TextView welcomeText = (TextView) findViewById(R.id.voiceChatHeaderText);
-        welcomeText.setText(text);
+        String text = String.format(res.getString(R.string.username), toUsername);
+        TextView voiceChatHeaderText = (TextView) findViewById(R.id.voiceChatHeaderText);
+        voiceChatHeaderText.setText(text);
+        videoEnabled = false;
 
         if(getCallingActivity().getClassName().equals(IncomingChatActivity.class.getCanonicalName())) {
             Log.v(username, "INCOMING SIGNALLER ADDED");
             signaller = Signaller.incomingChatSignaller;
-            establishChat();
+            establishChat(false);
         } else {
+            outgoing = true;
             Log.v(username, "OUTGOING SIGNALLER ADDED");
             signaller = Signaller.outgoingChatSignaller;
             establishChat(true);
         }
+
+        findViewById(R.id.disconnectButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            if(outgoing) {
+                signaller.disconnect();
+            }
+            peerConnection.dispose();
+            finish();
+            }
+        });
     }
 
     public void establishChat(boolean outgoing) {
         super.establishChat();
         if (peerConnection != null && outgoing) {
-            peerConnection.createOffer(this, new MediaConstraints());
-        } else if (peerConnection != null) {
+            MediaConstraints mediaConstraints = new MediaConstraints();
+            mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
+                    "OfferToReceiveAudio", "true"));
+            mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
+                    "OfferToReceiveVideo", "false"));
+            peerConnection.createOffer(this, mediaConstraints);
+        } else if (peerConnection == null && outgoing) {
             signaller.disconnect();
             displayAlertDialog("Call Error", "Failed to establish connection");
         }
@@ -76,9 +85,11 @@ public class VoiceChatDisplayActivity extends ChatDisplayActivity {
 
     @Override
     public void onAddStream(MediaStream mediaStream) {
-        if(hasRecordAudioPermission()) {
+        if(hasPermissions()) {
             Log.v(username, "STREAM ADDED");
             this.mediaStream = mediaStream;
+            playStreams();
+        } else {
             requestPermissions();
         }
     }
@@ -93,7 +104,7 @@ public class VoiceChatDisplayActivity extends ChatDisplayActivity {
         ActivityCompat.requestPermissions(this, new String[]{requiredPermission}, 2);
     }
 
-    private boolean hasRecordAudioPermission(){
+    private boolean hasPermissions(){
         Boolean hasPermission = (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED);
 
@@ -104,13 +115,17 @@ public class VoiceChatDisplayActivity extends ChatDisplayActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        if(hasRecordAudioPermission()) {
-            AudioTrack audioTrack = mediaStream.audioTracks.getFirst();
-            audioTrack.setEnabled(true);
+        if(hasPermissions() && mediaStream.audioTracks.size() > 0) {
+            playStreams();
         }
         else {
             displayAlertDialog("Audio Permissions", "Remember, to communicate you must enable audio permissions");
             finish();
         }
+    }
+
+    private void playStreams() {
+        AudioTrack audioTrack = mediaStream.audioTracks.getFirst();
+        audioTrack.setEnabled(true);
     }
 }

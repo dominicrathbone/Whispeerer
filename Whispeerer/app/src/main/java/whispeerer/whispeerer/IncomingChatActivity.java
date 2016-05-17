@@ -1,6 +1,7 @@
 package whispeerer.whispeerer;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -22,20 +23,27 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
+import android.os.Vibrator;
 
 /**
  * Created by Dominic on 11/04/2016.
  */
-public class IncomingChatActivity extends ChatActivity {
+public class IncomingChatActivity extends ChatActivity implements Observer {
 
     private String fromUsername;
+    private boolean answered = false;
+    private Vibrator v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {0, 100, 1000};
+        v.vibrate(pattern, 0);
+
         fromUsername = intent.getStringExtra(HomeActivity.FROM_USERNAME);
         signaller = Signaller.incomingChatSignaller;
-
+        signaller.setObserver(this);
         setContentView(R.layout.activity_incoming_call);
         Resources res = getResources();
         String text = String.format(res.getString(R.string.from_username_calling_text), fromUsername);
@@ -45,6 +53,7 @@ public class IncomingChatActivity extends ChatActivity {
         findViewById(R.id.acceptButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                v.cancel();
                 answer(ChatStatus.ACCEPTED);
                 openChatDisplayActivity(fromUsername);
                 finish();
@@ -54,6 +63,7 @@ public class IncomingChatActivity extends ChatActivity {
         findViewById(R.id.declineButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                v.cancel();
                 answer(ChatStatus.DECLINED);
                 finish();
             }
@@ -63,11 +73,20 @@ public class IncomingChatActivity extends ChatActivity {
         t.schedule(new TimerTask() {
             @Override
             public void run() {
-                answer(ChatStatus.DECLINED);
-                finish();
+                if(!answered) {
+                    v.cancel();
+                    answer(ChatStatus.DECLINED);
+                    finish();
+                }
             }
-        }, 170500);
+        }, 17500);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        signaller.setObserver(this);
     }
 
     public void answer(ChatStatus status) {
@@ -77,6 +96,7 @@ public class IncomingChatActivity extends ChatActivity {
             json.put("from", username);
             json.put("chatStatus", status.name());
             signaller.send("answer", json.toString());
+            answered = true;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -93,5 +113,17 @@ public class IncomingChatActivity extends ChatActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        try {
+            JSONObject json = new JSONObject((String) data);
+            if (json.getString("chatStatus").equals(ChatStatus.CANCELLED.name())) {
+                finish();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

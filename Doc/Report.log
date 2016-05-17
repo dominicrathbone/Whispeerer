@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2015.10.27)  13 MAY 2016 17:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2015.10.27)  17 MAY 2016 13:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -46,7 +46,12 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 10.
  [1
 
-{c:/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./Report.toc)
+{c:/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./Report.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 4.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 4.
+)
 \tf@toc=\write3
 \openout3 = `Report.toc'.
 
@@ -61,36 +66,36 @@ Chapter 1.
 Chapter 2.
 [3
 
-]
+] [4]
 Chapter 3.
-[4
-
-]
-Chapter 4.
 [5
 
 ]
-Chapter 5.
+Chapter 4.
 [6
+
+]
+Chapter 5.
+[7
 
 ] (./Report.aux) ) 
 Here is how much of TeX's memory you used:
- 254 strings out of 493054
- 2696 string characters out of 6138326
- 54372 words of memory out of 5000000
- 3849 multiletter control sequences out of 15000+600000
- 8195 words of font info for 29 fonts, out of 8000000 for 9000
+ 259 strings out of 493054
+ 2772 string characters out of 6138326
+ 58372 words of memory out of 5000000
+ 3854 multiletter control sequences out of 15000+600000
+ 9107 words of font info for 32 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 23i,6n,17p,118b,191s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 23i,6n,18p,1066b,191s stack positions out of 5000i,500n,10000p,200000b,80000s
 <c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 bx10.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 <c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texliv
 e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2015/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on Report.pdf (7 pages, 62213 bytes).
+Output written on Report.pdf (8 pages, 85931 bytes).
 PDF statistics:
- 48 PDF objects out of 1000 (max. 8388607)
- 33 compressed objects within 1 object stream
+ 51 PDF objects out of 1000 (max. 8388607)
+ 35 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

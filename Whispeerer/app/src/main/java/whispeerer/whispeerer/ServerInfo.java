@@ -18,4 +18,5 @@ public enum ServerInfo {
     public String getUri() {
         return this.uri;
     }
+
 }

@@ -31,24 +31,27 @@ public class MediaStreamFactory {
         mediaStream.addTrack(outgoingAudioTrack);
 
         if(videoEnabled) {
-            VideoSource videoSource;
-            VideoTrack outgoingVideoTrack;
-            MediaConstraints videoConstraints = new MediaConstraints();
-            videoSource = peerConnectionFactory.createVideoSource(getCamera(), videoConstraints);
-            outgoingVideoTrack = peerConnectionFactory.createVideoTrack("OUTGOING_VIDEO", videoSource);
-            mediaStream.addTrack(outgoingVideoTrack);
+            VideoCapturerAndroid videoCapturerAndroid = getCamera();
+            if(videoCapturerAndroid != null) {
+                VideoSource videoSource;
+                VideoTrack outgoingVideoTrack;
+                MediaConstraints videoConstraints = new MediaConstraints();
+                videoSource = peerConnectionFactory.createVideoSource(videoCapturerAndroid, videoConstraints);
+                outgoingVideoTrack = peerConnectionFactory.createVideoTrack("OUTGOING_VIDEO", videoSource);
+                mediaStream.addTrack(outgoingVideoTrack);
+            }
         }
         return mediaStream;
     }
 
     private VideoCapturerAndroid getCamera() {
-        String cameraName = null;
         if(VideoCapturerAndroid.getDeviceCount() >= 1) {
-            cameraName = VideoCapturerAndroid.getNameOfFrontFacingDevice();
+            String cameraName = VideoCapturerAndroid.getNameOfFrontFacingDevice();
             if(cameraName == null) {
                 cameraName = VideoCapturerAndroid.getNameOfBackFacingDevice();
             }
+            return VideoCapturerAndroid.create(cameraName);
         }
-        return VideoCapturerAndroid.create(cameraName);
+        return null;
     }
 }
