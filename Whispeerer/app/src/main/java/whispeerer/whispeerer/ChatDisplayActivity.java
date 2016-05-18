@@ -29,10 +29,10 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
 
     String toUsername;
     PeerConnection peerConnection;
-    private SessionDescription sessionDescription;
     Signaller signaller;
     private Gson gson;
     String username;
+    MediaStreamFactory mediaStreamFactory;
     MediaStream mediaStream;
     boolean videoEnabled;
     boolean outgoing;
@@ -61,7 +61,7 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
 
         if (peerConnectionFactoryInitialized) {
             PeerConnectionFactory peerConnectionFactory = new PeerConnectionFactory();
-            MediaStreamFactory mediaStreamFactory = new MediaStreamFactory(peerConnectionFactory);
+            mediaStreamFactory = new MediaStreamFactory(peerConnectionFactory);
 
             List<PeerConnection.IceServer> iceServers = new ArrayList<>();
             MediaConstraints mediaConstraints = new MediaConstraints();
@@ -70,16 +70,16 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
             mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
                     "OfferToReceiveVideo", videoEnabled.toString()));
 
-//            JSONObject videoConstraints = new JSONObject();
-//            try {
-//                videoConstraints.put("width", 400);
-//                videoConstraints.put("height", 800);
-//                videoConstraints.put("frameRate", 60);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//            mediaConstraints.optional.add(new MediaConstraints.KeyValuePair("video", videoConstraints.toString()));
+            JSONObject videoConstraints = new JSONObject();
+            try {
+                videoConstraints.put("width", 400);
+                videoConstraints.put("height", 800);
+                videoConstraints.put("frameRate", 60);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            mediaConstraints.optional.add(new MediaConstraints.KeyValuePair("video", videoConstraints.toString()));
             iceServers.add(new PeerConnection.IceServer("stun:stun.l.google.com:19302"));
 
             PeerConnection peerConnection = peerConnectionFactory.createPeerConnection(
@@ -98,14 +98,28 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
 
     @Override
     public void onCreateSuccess(SessionDescription sessionDescription) {
-        this.sessionDescription = sessionDescription;
         peerConnection.setLocalDescription(this, sessionDescription);
         Log.v(username, "SDP CREATED SUCCESSFULLY");
     }
 
     @Override
     public void onSetSuccess() {
-        signaller.send("sdp", gson.toJson(sessionDescription));
+        //if offerer,
+        if(outgoing) {
+            //havent yet received an answer
+            if(peerConnection.getRemoteDescription() == null) {
+                //send offer
+                signaller.send("sdp", gson.toJson(peerConnection.getLocalDescription()));
+            }
+        } else {
+            //else if, they are an answerer and havent created an answer yet, create answer.
+            if(peerConnection.getLocalDescription() == null) {
+                peerConnection.createAnswer(this, new MediaConstraints());
+            } else {
+                //else if they have created an answer, send answer.
+                signaller.send("sdp", gson.toJson(peerConnection.getLocalDescription()));
+            }
+        }
         Log.v(username, "SDP SET SUCCESSFULLY");
     }
 

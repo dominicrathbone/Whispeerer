@@ -3,13 +3,10 @@ package whispeerer.whispeerer;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
-import android.opengl.GLSurfaceView;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -39,7 +36,6 @@ public class VideoChatDisplayActivity extends ChatDisplayActivity {
         setContentView(R.layout.activity_video_chat);
 
         try {
-
             Display display = getWindowManager().getDefaultDisplay();
             Point dimensions = new Point();
             display.getSize(dimensions);
@@ -83,12 +79,17 @@ public class VideoChatDisplayActivity extends ChatDisplayActivity {
         findViewById(R.id.disconnectButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if(outgoing) {
-                signaller.disconnect();
-            }
-            mediaStream.dispose();
-            peerConnection.dispose();
-            finish();
+                if(mediaStream != null && peerConnection != null) {
+                    peerConnection.removeStream(mediaStream);
+                    mediaStream.dispose();
+                    peerConnection.close();
+                    peerConnection.dispose();
+                    mediaStreamFactory.disposeVideoCapturer();
+                }
+                if(outgoing) {
+                    signaller.disconnect();
+                }
+                finish();
             }
         });
     }
@@ -132,6 +133,14 @@ public class VideoChatDisplayActivity extends ChatDisplayActivity {
         }
     }
 
+    @Override
+    public void onConfigurationChanged (Configuration newConfig) {
+        Point displaySize = new Point();
+        getWindowManager().getDefaultDisplay().getSize(displaySize);
+        videoView.updateDisplaySize(displaySize);
+        super.onConfigurationChanged(newConfig);
+    }
+
     private void requestPermissions() {
         String requiredAudioPermission = Manifest.permission.RECORD_AUDIO;
 
@@ -150,8 +159,7 @@ public class VideoChatDisplayActivity extends ChatDisplayActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if(hasPermissions()) {
             playStreams();
         }

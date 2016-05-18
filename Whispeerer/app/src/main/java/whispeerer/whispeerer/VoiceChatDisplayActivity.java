@@ -46,11 +46,15 @@ public class VoiceChatDisplayActivity extends ChatDisplayActivity {
         findViewById(R.id.disconnectButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if(outgoing) {
-                signaller.disconnect();
-            }
-            peerConnection.dispose();
-            finish();
+                if(mediaStream != null && peerConnection != null) {
+                    peerConnection.removeStream(mediaStream);
+                    peerConnection.close();
+                    peerConnection.dispose();
+                }
+                if(outgoing) {
+                    signaller.disconnect();
+                }
+                finish();
             }
         });
     }

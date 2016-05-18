@@ -42,7 +42,14 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        connectToNetwork();
+        progress = ProgressDialog.show(homeActivity, "","Connecting to Signalling Server...", true);
+        if(connectToNetwork()) {
+            progress.setMessage("Creating new session username...");
+            createNewUser();
+        } else {
+            progress.dismiss();
+            displayAlertDialog("Network Connection Failure", "Try checking to see if your wi-fi is enabled");
+        }
     }
 
     @Override
@@ -53,19 +60,17 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         }
     }
 
-    private void connectToNetwork() {
-        progress = ProgressDialog.show(homeActivity, "","Connecting to Signalling Server...", true);
+    private boolean connectToNetwork() {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            createNewUser();
+            return true;
         } else {
-            displayAlertDialog("Network Connection Failure", "Try checking to see if your wi-fi is enabled");
+            return false;
         }
     }
 
     private void createNewUser() {
-        progress.setMessage("Creating new session username...");
         ServerApiClient.createNewUser(new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -118,10 +123,12 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 Log.v(username, "NEW_USER_REQUEST_STATUS: " + Integer.toString(statusCode) + " - " + responseBody);
                 displayAlertDialog("Server Connection Failure", "The signalling server might be down");
+                Resources res = getResources();
+                TextView usernameText = (TextView) findViewById(R.id.username);
+                usernameText.setText("");
                 progress.dismiss();
             }
         });
-
     }
 
     public void openStartChatActivity(ChatType chatType) {

@@ -108,9 +108,6 @@ public class Signaller extends Observable {
                 SessionDescription sessionDescription = gson.fromJson((String) args[0], SessionDescription.class);
                 if(sessionDescription != null) {
                     peerConnection.setRemoteDescription(sdpObserver, sessionDescription);
-                    if(sessionDescription.type == SessionDescription.Type.OFFER) {
-                        peerConnection.createAnswer(sdpObserver, new MediaConstraints());
-                    }
                     Log.v(username, "SDP RECEIVED");
                 }
             }

@@ -15,12 +15,17 @@ import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import cz.msebera.android.httpclient.Header;
 
-public class StartChatActivity extends AppCompatActivity {
+public class StartChatActivity extends AppCompatActivity implements Observer {
 
     public static final String TO_USERNAME = "TO_USERNAME";
     private String username;
@@ -36,6 +41,8 @@ public class StartChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
         chatType = intent.getStringExtra(HomeActivity.CHAT_TYPE);
         username = getIntent().getStringExtra(HomeActivity.USERNAME);
+
+        Signaller.incomingChatSignaller.setObserver(this);
 
         Resources res = getResources();
         String text = "";
@@ -60,6 +67,12 @@ public class StartChatActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Signaller.incomingChatSignaller.setObserver(this);
+    }
+
     private void startChat(final String chatType) {
         findViewById(R.id.goButton).setEnabled(false);
         final EditText toUsernameInput = (EditText) findViewById(R.id.toUsernameInput);
@@ -74,7 +87,7 @@ public class StartChatActivity extends AppCompatActivity {
                 public void run() {
                     toUsernameInput.setError(null);
                 }
-            }, 10000);
+            }, 5000);
             return;
         }
         progress = ProgressDialog.show(startChatActivity, "","Verifying user exists...", true);
@@ -121,6 +134,22 @@ public class StartChatActivity extends AppCompatActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        try {
+            JSONObject json = new JSONObject((String) data);
+            if(json.getString("type").equals("offer")) {
+                Intent intent = new Intent(this, IncomingChatActivity.class);
+                intent.putExtra(HomeActivity.USERNAME, username);
+                intent.putExtra(HomeActivity.CHAT_TYPE, json.getString("chatType"));
+                intent.putExtra(HomeActivity.FROM_USERNAME, json.getString("from"));
+                startActivity(intent);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
 

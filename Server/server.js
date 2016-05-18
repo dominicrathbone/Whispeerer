@@ -61,6 +61,7 @@ function User(name) {
             } else {
                 console.log(user.name + " accepted user: " + user.currentGuest);
             }
+            socket.broadcast.emit("answer", data);
         });
 
         socket.on('sdp', function(sdp) {
@@ -70,7 +71,7 @@ function User(name) {
         });
 
         socket.on('candidate', function(candidate) {
-            console.log("candidate");
+            console.log("CANDIDATE");
             console.log(candidate);
             socket.broadcast.emit("candidate", candidate);
         });
