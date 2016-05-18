@@ -40,6 +40,7 @@ public class VideoChatDisplayActivity extends ChatDisplayActivity {
             Point dimensions = new Point();
             display.getSize(dimensions);
             videoView = new MyGLSurfaceView(this, dimensions);
+            videoView.setRotation(90);
             VideoRendererGui.setView(videoView, new Runnable() {
                 @Override
                 public void run() {

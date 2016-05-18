@@ -47,7 +47,6 @@ public class VoiceChatDisplayActivity extends ChatDisplayActivity {
             @Override
             public void onClick(View view) {
                 if(mediaStream != null && peerConnection != null) {
-                    peerConnection.removeStream(mediaStream);
                     peerConnection.close();
                     peerConnection.dispose();
                 }

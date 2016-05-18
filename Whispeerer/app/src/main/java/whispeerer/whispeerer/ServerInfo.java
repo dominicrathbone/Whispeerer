@@ -4,8 +4,8 @@ package whispeerer.whispeerer;
  * Created by Dominic on 12/05/2016.
  */
 public enum ServerInfo {
-    BASE_URL("http://192.168.1.101"),
-    PORT("8080"),
+    BASE_URL("https://www.transfer4.me"),
+    PORT("8081"),
     USER("/user"),
     USERS("/users/");
 
