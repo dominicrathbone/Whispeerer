@@ -49,16 +49,6 @@ public class MediaStreamFactory {
     private VideoCapturerAndroid getCamera() {
 
         if(VideoCapturerAndroid.getDeviceCount() >= 1) {
-// Might be able to fix orientation with this.
-//            for(int i = 0; i < Camera.getNumberOfCameras(); i++) {
-//                Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-//                Camera.getCameraInfo(i, cameraInfo);
-//                if(cameraInfo.orientation == 270) {
-//                    Camera camera = Camera.open(i);
-//                    camera.setDisplayOrientation(90);
-//                    camera.release();
-//                }
-//            }
             String cameraName = VideoCapturerAndroid.getNameOfFrontFacingDevice();
             if(cameraName == null) {
                 cameraName = VideoCapturerAndroid.getNameOfBackFacingDevice();

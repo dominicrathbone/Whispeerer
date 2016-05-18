@@ -27,8 +27,8 @@ The aim of this project was to provide an application enabling users to communic
 			\subsection{Architecture}
 			As the majority of the data processing is handled by the libraries, the application's responsibilities mainly lied in the triggering of and reaction to incoming messages from another instance of the application, whether it be through the signalling server or directly via the peer-to-peer connection. Due to this, the architecture of the application can be represented by an "Event-Driven Architecture" pattern. This is where the flow of control in an application is dictated by the emission of and reaction to "events" where an event is a change in the state of the application. 
 			
-			\subsection{Observer Patterns}
-			To create the event-driven architecture, the application utilises the Observer pattern to trigger changes in the flow of the application by asynchronously updating activities (and thus the user interface) when certain events are received. The observer pattern is a design pattern in which 
+			\subsection{Observer Pattern}
+			To create the event-driven architecture, the application utilises the Observer pattern to trigger changes in the flow of the application by asynchronously updating activities (and thus the user interface) when certain events are received. The observer pattern is a design pattern in which two types of objects are implemented, "Observers" and "Observables". Each Observer overrides a set of methods that are called when an event on the "Observable" object happens and then adds itself to a list of observers on the observable objects. When an event occurs on this observable object, it goes through the list of observers, calling the corresponding event method. In this case, the observer pattern is used to react to events from such as incoming chat requests from another application instance.
 			
 			e, the majority of the "events" within the application take the form of JSON messages transmitted and received over the WebSockets connection with the server. To react to these socket events, the socket.io Java client library expects the application to provide an object implementing the "Listener" interface when setting up these events. This interface requires the object to implement methods with the code that is to be called when the event is received (see Appendix A for an example).
 			
@@ -38,7 +38,7 @@ The aim of this project was to provide an application enabling users to communic
 
  			Further to this, 
 			
-		This event-driven architecture is applied using several different design patterns.
+
 		Observer Pattern
 		Handler Pattern
 		Factory Pattern
@@ -82,7 +82,7 @@ The aim of this project was to provide an application enabling users to communic
 	\appendix
 	\chapter{}
 	\begin{figure}[h!]
-		\caption{Typing in Java}
+		\caption{Event Listener}
 		\begin{lstlisting}[language=Java,frame=single,breaklines=true]
 socket.on("offer", new Emitter.Listener() {
 	@Override

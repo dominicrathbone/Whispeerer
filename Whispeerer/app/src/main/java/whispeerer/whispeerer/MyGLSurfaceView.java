@@ -13,7 +13,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     public MyGLSurfaceView(Context c, Point dimensions) {
         super(c);
-        super.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         this.dimensions = dimensions;
     }
 
@@ -22,14 +21,4 @@ public class MyGLSurfaceView extends GLSurfaceView {
         setMeasuredDimension(dimensions.x, dimensions.y);
     }
 
-    public void updateDisplaySize(Point dimensions) {
-        this.dimensions = dimensions;
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        setSystemUiVisibility(SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                SYSTEM_UI_FLAG_FULLSCREEN | SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-    }
 }

@@ -25,22 +25,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".IncomingChatActivity" android:noHistory="true">
+        <activity android:name=".IncomingChatActivity"
+            android:noHistory="true">
         </activity>
-        <activity android:name=".OutgoingChatActivity" android:noHistory="true">
+        <activity android:name=".OutgoingChatActivity"
+            android:noHistory="true">
         </activity>
         <activity
             android:name=".StartChatActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name=".VideoChatDisplayActivity"
-            android:screenOrientation="fullUser"
-            android:configChanges="orientation|screenSize">
+            android:noHistory="true">
             <uses-permission android:name="android.permission.RECORD_AUDIO" />
             <uses-permission android:name="android.permission.RECORD_VIDEO" />
 
         </activity>
-        <activity android:name=".VoiceChatDisplayActivity">
+        <activity android:name=".VoiceChatDisplayActivity"
+            android:noHistory="true">
             <uses-permission android:name="android.permission.RECORD_AUDIO" />
         </activity>
     </application>

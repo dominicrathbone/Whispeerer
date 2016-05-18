@@ -40,11 +40,8 @@ public class VideoChatDisplayActivity extends ChatDisplayActivity {
             Point dimensions = new Point();
             display.getSize(dimensions);
             videoView = new MyGLSurfaceView(this, dimensions);
-            videoView.setRotation(90);
             VideoRendererGui.setView(videoView, new Runnable() {
-                @Override
-                public void run() {
-                }
+                @Override public void run() {}
             });
             render = VideoRendererGui.create(0, 0, 100, 100, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, true);
             RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.mainRelativeLayout);
@@ -99,10 +96,8 @@ public class VideoChatDisplayActivity extends ChatDisplayActivity {
         super.establishChat();
         if (peerConnection != null && outgoing) {
             MediaConstraints mediaConstraints = new MediaConstraints();
-            mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
-                    "OfferToReceiveAudio", "true"));
-            mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
-                    "OfferToReceiveVideo", "true"));
+            mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"));
+            mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"));
             peerConnection.createOffer(this, mediaConstraints);
         } else if (peerConnection == null && outgoing) {
             signaller.disconnect();
@@ -134,14 +129,6 @@ public class VideoChatDisplayActivity extends ChatDisplayActivity {
         }
     }
 
-    @Override
-    public void onConfigurationChanged (Configuration newConfig) {
-        Point displaySize = new Point();
-        getWindowManager().getDefaultDisplay().getSize(displaySize);
-        videoView.updateDisplaySize(displaySize);
-        super.onConfigurationChanged(newConfig);
-    }
-
     private void requestPermissions() {
         String requiredAudioPermission = Manifest.permission.RECORD_AUDIO;
 
@@ -153,8 +140,7 @@ public class VideoChatDisplayActivity extends ChatDisplayActivity {
     }
 
     private boolean hasPermissions(){
-        Boolean hasPermission = (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED);
+        Boolean hasPermission = (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED);
         Log.v(username + " has audio permission? ", hasPermission.toString());
         return hasPermission;
     }
