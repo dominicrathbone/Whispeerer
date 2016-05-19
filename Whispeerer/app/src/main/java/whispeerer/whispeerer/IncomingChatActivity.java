@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
 import org.webrtc.SdpObserver;
+import org.webrtc.SessionDescription;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -53,9 +54,11 @@ public class IncomingChatActivity extends ChatActivity implements Observer {
         findViewById(R.id.acceptButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                findViewById(R.id.acceptButton).setEnabled(false);
+                findViewById(R.id.declineButton).setEnabled(false);
                 v.cancel();
-                answer(ChatStatus.ACCEPTED);
                 openChatDisplayActivity(fromUsername);
+                answered = true;
                 finish();
             }
         });
@@ -63,8 +66,11 @@ public class IncomingChatActivity extends ChatActivity implements Observer {
         findViewById(R.id.declineButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                findViewById(R.id.acceptButton).setEnabled(false);
+                findViewById(R.id.declineButton).setEnabled(false);
                 v.cancel();
-                answer(ChatStatus.DECLINED);
+                signaller.sendInitialChatAnswer(ChatStatus.DECLINED);
+                answered = true;
                 finish();
             }
         });
@@ -74,8 +80,10 @@ public class IncomingChatActivity extends ChatActivity implements Observer {
             @Override
             public void run() {
                 if(!answered) {
+                    findViewById(R.id.acceptButton).setEnabled(false);
+                    findViewById(R.id.declineButton).setEnabled(false);
                     v.cancel();
-                    answer(ChatStatus.DECLINED);
+                    signaller.sendInitialChatAnswer(ChatStatus.DECLINED);
                     finish();
                 }
             }
@@ -87,19 +95,6 @@ public class IncomingChatActivity extends ChatActivity implements Observer {
     public void onResume() {
         super.onResume();
         signaller.setObserver(this);
-    }
-
-    public void answer(ChatStatus status) {
-        try {
-            JSONObject json = new JSONObject();
-            json.put("type", "answer");
-            json.put("from", username);
-            json.put("chatStatus", status.name());
-            signaller.send("answer", json.toString());
-            answered = true;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     void displayErrorDialog(String title, String message) {
@@ -118,8 +113,8 @@ public class IncomingChatActivity extends ChatActivity implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         try {
-            JSONObject json = new JSONObject((String) data);
-            if (json.getString("chatStatus").equals(ChatStatus.CANCELLED.name())) {
+             JSONObject json = new JSONObject((String) data);
+            if (json.has("chatStatus") && json.getString("chatStatus").equals(ChatStatus.CANCELLED.name())) {
                 finish();
             }
         } catch (JSONException e) {

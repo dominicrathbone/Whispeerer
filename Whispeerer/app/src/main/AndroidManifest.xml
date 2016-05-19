@@ -35,14 +35,12 @@
             android:name=".StartChatActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
-        <activity android:name=".VideoChatDisplayActivity"
-            android:noHistory="true">
+        <activity android:name=".VideoChatDisplayActivity">
             <uses-permission android:name="android.permission.RECORD_AUDIO" />
             <uses-permission android:name="android.permission.RECORD_VIDEO" />
 
         </activity>
-        <activity android:name=".VoiceChatDisplayActivity"
-            android:noHistory="true">
+        <activity android:name=".VoiceChatDisplayActivity">
             <uses-permission android:name="android.permission.RECORD_AUDIO" />
         </activity>
     </application>

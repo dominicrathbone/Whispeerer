@@ -32,6 +32,8 @@ public class StartChatActivity extends AppCompatActivity implements Observer {
     private String chatType;
     private ProgressDialog progress;
     private StartChatActivity startChatActivity = this;
+    private Timer t = new Timer();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +87,12 @@ public class StartChatActivity extends AppCompatActivity implements Observer {
             t.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    toUsernameInput.setError(null);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toUsernameInput.setError(null);
+                        }
+                    });
                 }
             }, 5000);
             return;
@@ -105,6 +112,17 @@ public class StartChatActivity extends AppCompatActivity implements Observer {
                 progress.dismiss();
                 if(statusCode == 404) {
                     toUsernameInput.setError("User doesn't exist");
+                    t.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    toUsernameInput.setError(null);
+                                }
+                            });
+                        }
+                    }, 5000);
                 } else {
                     displayAlertDialog("Server Connection Error", "Couldn't verify if user exists", false);
                 }

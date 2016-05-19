@@ -1,5 +1,8 @@
 package whispeerer.whispeerer;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,8 +10,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.webrtc.DataChannel;
 import org.webrtc.IceCandidate;
 import org.webrtc.MediaConstraints;
@@ -19,8 +20,9 @@ import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Dominic on 12/04/2016.
@@ -33,8 +35,8 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
     private Gson gson;
     String username;
     MediaStreamFactory mediaStreamFactory;
+    MediaStreamWrapper mediaStreamWrapper;
     MediaStream mediaStream;
-    boolean videoEnabled;
     boolean outgoing;
 
     @Override
@@ -46,9 +48,18 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
         toUsername = intent.getStringExtra(StartChatActivity.TO_USERNAME);
     }
 
-    void establishChat() {
+    void establishChat(boolean outgoing, boolean videoEnabled) {
         peerConnection = createPeerConnection(videoEnabled);
         signaller.setPeerConnection(peerConnection, this);
+        if (peerConnection == null && outgoing) {
+            signaller.disconnect();
+        } else if (peerConnection != null && outgoing) {
+            peerConnection.createOffer(this, new MediaConstraints());
+        } else if (peerConnection != null && !outgoing) {
+            signaller.sendInitialChatAnswer(ChatStatus.ACCEPTED);
+            Log.v(username, "ANSWER SENT");
+
+        }
     }
 
     PeerConnection createPeerConnection(Boolean videoEnabled) {
@@ -56,8 +67,7 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
                 getApplicationContext(),
                 true,
                 true,
-                true,
-                null);
+                true);
 
         if (peerConnectionFactoryInitialized) {
             PeerConnectionFactory peerConnectionFactory = new PeerConnectionFactory();
@@ -70,16 +80,6 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
             mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
                     "OfferToReceiveVideo", videoEnabled.toString()));
 
-            JSONObject videoConstraints = new JSONObject();
-            try {
-                videoConstraints.put("width", 400);
-                videoConstraints.put("height", 800);
-                videoConstraints.put("frameRate", 60);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            mediaConstraints.optional.add(new MediaConstraints.KeyValuePair("video", videoConstraints.toString()));
             iceServers.add(new PeerConnection.IceServer("stun:stun.l.google.com:19302"));
 
             PeerConnection peerConnection = peerConnectionFactory.createPeerConnection(
@@ -87,12 +87,28 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
                     mediaConstraints,
                     this
             );
-            peerConnection.addStream(mediaStreamFactory.getMediaStream(videoEnabled));
+            mediaStreamWrapper = mediaStreamFactory.create(videoEnabled);
+            peerConnection.addStream(mediaStreamWrapper.getMediaStream());
             Log.v(username, "PEER CONNECTION CREATED");
             return peerConnection;
         } else {
             return null;
         }
+    }
+
+    public void disconnect() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(peerConnection != null) {
+                    peerConnection.close();
+                }
+                if(outgoing) {
+                    signaller.disconnect();
+                }
+                finish();
+            }
+        });
     }
 
 
@@ -144,6 +160,11 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
     }
 
     @Override
+    public void onIceConnectionReceivingChange(boolean b) {
+
+    }
+
+    @Override
     public void onIceGatheringChange(PeerConnection.IceGatheringState iceGatheringState) {
 
     }
@@ -174,5 +195,23 @@ public class ChatDisplayActivity extends AppCompatActivity  implements SdpObserv
 
     }
 
+     void displayAlertDialog(final Context context, final String title, final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AlertDialog.Builder(context)
+                        .setTitle(title)
+                        .setMessage(message)
+                        .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
+
+    }
 }
 

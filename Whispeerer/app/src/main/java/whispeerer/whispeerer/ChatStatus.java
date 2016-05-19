@@ -6,5 +6,6 @@ package whispeerer.whispeerer;
 public enum ChatStatus {
     ACCEPTED,
     DECLINED,
-    CANCELLED
+    CANCELLED,
+    READY
 }

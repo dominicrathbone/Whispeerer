@@ -29,18 +29,7 @@ public class OutgoingChatActivity extends ChatActivity implements Observer {
         signaller = new Signaller(toUsername, false);
         signaller.setObserver(this);
         Signaller.incomingChatSignaller.setObserver(this);
-
-        try {
-            JSONObject json = new JSONObject();
-            json.put("type", "offer");
-            json.put("from", username);
-            json.put("chatType", chatType);
-            signaller.send("offer", json.toString());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            displayAlertDialog("Call Error", "Couldn't send offer to that user.");
-        }
+        signaller.sendInitialChatOffer(chatType, username);
         setContentView(R.layout.activity_outgoing_call);
 
         Resources res = getResources();
@@ -51,13 +40,7 @@ public class OutgoingChatActivity extends ChatActivity implements Observer {
         findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    JSONObject json = new JSONObject();
-                    json.put("chatStatus", ChatStatus.CANCELLED.name());
-                    signaller.send("offer", json.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                signaller.sendInitialChatCancellation();
                 signaller.disconnect();
                 finish();
             }

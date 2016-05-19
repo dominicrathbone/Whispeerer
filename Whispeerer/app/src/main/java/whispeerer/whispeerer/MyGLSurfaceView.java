@@ -14,6 +14,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
     public MyGLSurfaceView(Context c, Point dimensions) {
         super(c);
         this.dimensions = dimensions;
+        super.setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
     }
 
     @Override

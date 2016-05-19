@@ -26,64 +26,29 @@ public class VoiceChatDisplayActivity extends ChatDisplayActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice_chat);
 
-        Resources res = getResources();
-        String text = String.format(res.getString(R.string.username), toUsername);
-        TextView voiceChatHeaderText = (TextView) findViewById(R.id.voiceChatHeaderText);
-        voiceChatHeaderText.setText(text);
-        videoEnabled = false;
-
         if(getCallingActivity().getClassName().equals(IncomingChatActivity.class.getCanonicalName())) {
             Log.v(username, "INCOMING SIGNALLER ADDED");
             signaller = Signaller.incomingChatSignaller;
-            establishChat(false);
+            establishChat(false, true);
         } else {
             outgoing = true;
             Log.v(username, "OUTGOING SIGNALLER ADDED");
             signaller = Signaller.outgoingChatSignaller;
-            establishChat(true);
+            establishChat(true, true);
         }
+
+        Resources res = getResources();
+        String text = String.format(res.getString(R.string.username), toUsername);
+        TextView voiceChatHeaderText = (TextView) findViewById(R.id.voiceChatHeaderText);
+        voiceChatHeaderText.setText(text);
 
         findViewById(R.id.disconnectButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mediaStream != null && peerConnection != null) {
-                    peerConnection.close();
-                    peerConnection.dispose();
-                }
-                if(outgoing) {
-                    signaller.disconnect();
-                }
-                finish();
+                findViewById(R.id.disconnectButton).setEnabled(false);
+                disconnect();
             }
         });
-    }
-
-    public void establishChat(boolean outgoing) {
-        super.establishChat();
-        if (peerConnection != null && outgoing) {
-            MediaConstraints mediaConstraints = new MediaConstraints();
-            mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
-                    "OfferToReceiveAudio", "true"));
-            mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
-                    "OfferToReceiveVideo", "false"));
-            peerConnection.createOffer(this, mediaConstraints);
-        } else if (peerConnection == null && outgoing) {
-            signaller.disconnect();
-            displayAlertDialog("Call Error", "Failed to establish connection");
-        }
-    }
-
-    private void displayAlertDialog(String title, String message) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
     }
 
     @Override
@@ -101,7 +66,7 @@ public class VoiceChatDisplayActivity extends ChatDisplayActivity {
         String requiredPermission = Manifest.permission.RECORD_AUDIO;
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, requiredPermission)) {
-            displayAlertDialog("Audio Permissions", "Remember, to communicate you must enable audio permissions");
+            displayAlertDialog(this, "Audio Permissions", "Remember, to communicate you must enable audio permissions");
         }
 
         ActivityCompat.requestPermissions(this, new String[]{requiredPermission}, 2);
@@ -110,7 +75,6 @@ public class VoiceChatDisplayActivity extends ChatDisplayActivity {
     private boolean hasPermissions(){
         Boolean hasPermission = (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED);
-
         Log.v(username + " has audio permission? ", hasPermission.toString());
         return hasPermission;
     }
@@ -122,13 +86,18 @@ public class VoiceChatDisplayActivity extends ChatDisplayActivity {
             playStreams();
         }
         else {
-            displayAlertDialog("Audio Permissions", "Remember, to communicate you must enable audio permissions");
-            finish();
+                displayAlertDialog(this, "Audio Permissions", "Remember, to communicate you must enable audio permissions");
+                finish();
         }
     }
 
     private void playStreams() {
-        AudioTrack audioTrack = mediaStream.audioTracks.getFirst();
-        audioTrack.setEnabled(true);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AudioTrack audioTrack = mediaStream.audioTracks.getFirst();
+                audioTrack.setEnabled(true);
+            }
+        });
     }
 }

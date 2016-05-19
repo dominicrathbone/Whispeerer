@@ -5,31 +5,38 @@
 \contentsline {subsection}{\numberline {2.1.2}WebSockets}{4}
 \contentsline {section}{\numberline {2.2}Android Application}{5}
 \contentsline {subsection}{\numberline {2.2.1}Architecture}{5}
-\contentsline {subsection}{\numberline {2.2.2}Design Patterns}{5}
-\contentsline {subsection}{\numberline {2.2.3}Android Async HTTP Client}{5}
-\contentsline {subsection}{\numberline {2.2.4}WebSockets}{5}
-\contentsline {subsection}{\numberline {2.2.5}WebRTC}{6}
-\contentsline {subsection}{\numberline {2.2.6}OpenGL}{6}
-\contentsline {subsection}{\numberline {2.2.7}Android Services}{6}
-\contentsline {section}{\numberline {2.3}External Technologies}{6}
-\contentsline {section}{\numberline {2.4}Git}{6}
-\contentsline {section}{\numberline {2.5}Android Studio}{6}
-\contentsline {section}{\numberline {2.6}WebStorm}{6}
-\contentsline {chapter}{\numberline {3}Design}{7}
-\contentsline {section}{\numberline {3.1}Logo}{7}
-\contentsline {section}{\numberline {3.2}Color Scheme}{7}
-\contentsline {section}{\numberline {3.3}Layout}{7}
-\contentsline {chapter}{\numberline {4}Testing}{8}
-\contentsline {section}{\numberline {4.1}Automated Testing}{8}
-\contentsline {subsection}{\numberline {4.1.1}Unit Tests}{8}
-\contentsline {section}{\numberline {4.2}Manual Testing}{8}
-\contentsline {chapter}{\numberline {5}Reflection \& Review}{9}
-\contentsline {section}{\numberline {5.1}Background Research}{9}
-\contentsline {section}{\numberline {5.2}Methodology}{9}
-\contentsline {section}{\numberline {5.3}Project Estimation}{9}
-\contentsline {section}{\numberline {5.4}Development Process}{9}
-\contentsline {subsection}{\numberline {5.4.1}Debugging}{9}
-\contentsline {section}{\numberline {5.5}Application Improvements}{9}
-\contentsline {subsection}{\numberline {5.5.1}Web to Native Application Communication}{9}
-\contentsline {section}{\numberline {5.6}Conclusion}{9}
-\contentsline {chapter}{\numberline {A}}{10}
+\contentsline {subsection}{\numberline {2.2.2}Design Patterns}{6}
+\contentsline {section}{\numberline {2.3}Communications Layer}{7}
+\contentsline {subsection}{\numberline {2.3.1}Android Asynchronous HTTP Client}{7}
+\contentsline {subsection}{\numberline {2.3.2}WebRTC/LibJingle}{8}
+\contentsline {subsection}{\numberline {2.3.3}Socket.io Java Client}{8}
+\contentsline {section}{\numberline {2.4}Presentation Layer}{9}
+\contentsline {subsection}{\numberline {2.4.1}Home Activity}{9}
+\contentsline {subsection}{\numberline {2.4.2}Start Chat Activity}{10}
+\contentsline {subsection}{\numberline {2.4.3}Chat Activity}{11}
+\contentsline {subsection}{\numberline {2.4.4}Chat Display Activity}{11}
+\contentsline {section}{\numberline {2.5}Utilities}{11}
+\contentsline {section}{\numberline {2.6}Other Libraries}{11}
+\contentsline {section}{\numberline {2.7}External Technologies}{12}
+\contentsline {section}{\numberline {2.8}Git}{12}
+\contentsline {section}{\numberline {2.9}Android Studio}{12}
+\contentsline {section}{\numberline {2.10}WebStorm}{12}
+\contentsline {chapter}{\numberline {3}Design}{13}
+\contentsline {section}{\numberline {3.1}Logo}{13}
+\contentsline {section}{\numberline {3.2}Color Scheme}{13}
+\contentsline {section}{\numberline {3.3}Layout}{13}
+\contentsline {chapter}{\numberline {4}Testing}{14}
+\contentsline {section}{\numberline {4.1}Automated Testing}{14}
+\contentsline {subsection}{\numberline {4.1.1}Unit Tests}{14}
+\contentsline {section}{\numberline {4.2}Manual Testing}{14}
+\contentsline {chapter}{\numberline {5}Reflection \& Review}{15}
+\contentsline {section}{\numberline {5.1}Background Research}{15}
+\contentsline {section}{\numberline {5.2}Methodology}{15}
+\contentsline {section}{\numberline {5.3}Project Estimation}{15}
+\contentsline {section}{\numberline {5.4}Development Process}{15}
+\contentsline {subsection}{\numberline {5.4.1}Debugging}{15}
+\contentsline {section}{\numberline {5.5}Application Improvements}{15}
+\contentsline {subsection}{\numberline {5.5.1}Web to Native Application Communication}{15}
+\contentsline {section}{\numberline {5.6}Conclusion}{15}
+\contentsline {chapter}{\numberline {A}}{16}
+\contentsline {chapter}{\numberline {B}}{17}

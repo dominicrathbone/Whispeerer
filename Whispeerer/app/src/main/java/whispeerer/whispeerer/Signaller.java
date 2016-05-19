@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.webrtc.IceCandidate;
 import org.webrtc.MediaConstraints;
 import org.webrtc.PeerConnection;
@@ -112,6 +114,41 @@ public class Signaller extends Observable {
                 }
             }
         });
+    }
+
+    public void sendInitialChatOffer(String chatType, String fromUsername) {
+        try {
+            JSONObject json = new JSONObject();
+            json.put("type", "offer");
+            json.put("from", fromUsername);
+            json.put("chatType", chatType);
+            signaller.send("offer", json.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendInitialChatCancellation() {
+        try {
+            JSONObject json = new JSONObject();
+            json.put("chatStatus", ChatStatus.CANCELLED.name());
+            signaller.send("offer", json.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendInitialChatAnswer(ChatStatus status) {
+        try {
+            JSONObject json = new JSONObject();
+            json.put("type", "answer");
+            json.put("from", username);
+            json.put("chatStatus", status.name());
+            signaller.send("answer", json.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void disconnect() {

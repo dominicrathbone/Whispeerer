@@ -150,7 +150,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     public void update(Observable observable, Object data) {
         try {
             JSONObject json = new JSONObject((String) data);
-            if(json.getString("type").equals("offer")) {
+            if(json.has("type") && json.getString("type").equals("offer")) {
                 Intent intent = new Intent(this, IncomingChatActivity.class);
                 intent.putExtra(USERNAME, username);
                 intent.putExtra(CHAT_TYPE, json.getString("chatType"));

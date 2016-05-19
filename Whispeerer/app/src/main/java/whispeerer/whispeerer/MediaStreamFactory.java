@@ -1,8 +1,11 @@
 package whispeerer.whispeerer;
 
 
+import android.util.Log;
+
 import org.webrtc.AudioSource;
 import org.webrtc.AudioTrack;
+import org.webrtc.CameraEnumerationAndroid;
 import org.webrtc.MediaConstraints;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnectionFactory;
@@ -22,7 +25,7 @@ public class MediaStreamFactory {
         this.peerConnectionFactory = peerConnectionFactory;
     }
 
-    public MediaStream getMediaStream(boolean videoEnabled) {
+    public MediaStreamWrapper create(boolean videoEnabled) {
         MediaStream mediaStream = peerConnectionFactory.createLocalMediaStream("OUTGOING");
 
         AudioSource audioSource;
@@ -32,35 +35,56 @@ public class MediaStreamFactory {
         outgoingAudioTrack = peerConnectionFactory.createAudioTrack("OUTGOING_AUDIO", audioSource);
         mediaStream.addTrack(outgoingAudioTrack);
 
+        VideoSource videoSource = null;
         if(videoEnabled) {
             videoCapturerAndroid = getCamera();
             if(videoCapturerAndroid != null) {
-                VideoSource videoSource;
-                VideoTrack outgoingVideoTrack;
                 MediaConstraints videoConstraints = new MediaConstraints();
                 videoSource = peerConnectionFactory.createVideoSource(videoCapturerAndroid, videoConstraints);
-                outgoingVideoTrack = peerConnectionFactory.createVideoTrack("OUTGOING_VIDEO", videoSource);
+                VideoTrack outgoingVideoTrack = peerConnectionFactory.createVideoTrack("OUTGOING_VIDEO", videoSource);
                 mediaStream.addTrack(outgoingVideoTrack);
             }
         }
-        return mediaStream;
+        return new MediaStreamWrapper("OUTGOING", mediaStream, videoSource, audioSource);
     }
 
     private VideoCapturerAndroid getCamera() {
 
-        if(VideoCapturerAndroid.getDeviceCount() >= 1) {
-            String cameraName = VideoCapturerAndroid.getNameOfFrontFacingDevice();
+        if(CameraEnumerationAndroid.getDeviceCount() >= 1) {
+            String cameraName = CameraEnumerationAndroid.getNameOfFrontFacingDevice();
             if(cameraName == null) {
-                cameraName = VideoCapturerAndroid.getNameOfBackFacingDevice();
+                cameraName = CameraEnumerationAndroid.getNameOfBackFacingDevice();
             }
-            videoCapturerAndroid = VideoCapturerAndroid.create(cameraName);
+            videoCapturerAndroid = VideoCapturerAndroid.create(cameraName, new VideoCapturerAndroid.CameraEventsHandler() {
+                @Override
+                public void onCameraError(String s) {
+                    Log.v("CAMERA ERROR", s);
+                }
 
+                @Override
+                public void onCameraFreezed(String s) {
+                    Log.v("CAMERA FROZEN", s);
+                }
+
+                @Override
+                public void onCameraOpening(int i) {
+                    Log.v("CAMERA OPENING", ((Integer) i).toString());
+                }
+
+                @Override
+                public void onFirstFrameAvailable() {
+                    Log.v("CAMERA UPDATE", "FIRST FRAME AVAILABLE");
+                }
+
+                @Override
+                public void onCameraClosed() {
+                    Log.v("CAMERA CLOSED", "");
+
+                }
+            });
             return videoCapturerAndroid;
         }
         return null;
     }
 
-    public void disposeVideoCapturer() {
-        videoCapturerAndroid.dispose();
-    }
 }
