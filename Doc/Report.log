@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2015.10.27)  19 MAY 2016 20:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2015.10.27)  20 MAY 2016 23:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -199,115 +199,128 @@ File: resources/Architecture.png Graphic file (type png)
 
 <use resources/Architecture.png>
 Package pdftex.def Info: resources/Architecture.png used on input line 34.
-(pdftex.def)             Requested size: 465.14471pt x 433.52612pt.
+(pdftex.def)             Requested size: 265.78828pt x 247.72112pt.
+ [5 <./resources/Architecture.png>] [6]
+[7] <resources/ApplicationFlow.png, id=36, 946.53625pt x 1302.8675pt>
+File: resources/ApplicationFlow.png Graphic file (type png)
 
-Overfull \hbox (120.14471pt too wide) in paragraph at lines 34--35
-[][] 
- []
-
-[5] [6 <./resources/Architecture.png>] [7] [8]
-<resources/HomeActivity.png, id=39, 688.82344pt x 610.53094pt>
+<use resources/ApplicationFlow.png>
+Package pdftex.def Info: resources/ApplicationFlow.png used on input line 62.
+(pdftex.def)             Requested size: 283.96307pt x 390.86327pt.
+ [8]
+<resources/HomeActivity.png, id=40, 688.82344pt x 610.53094pt>
 File: resources/HomeActivity.png Graphic file (type png)
 
 <use resources/HomeActivity.png>
-Package pdftex.def Info: resources/HomeActivity.png used on input line 64.
+Package pdftex.def Info: resources/HomeActivity.png used on input line 69.
 (pdftex.def)             Requested size: 241.09181pt x 213.68903pt.
-
-<resources/StartChatActivity.png, id=40, 344.03531pt x 609.02531pt>
+ [9 <./resources/ApplicationFlow.png>]
+<resources/StartChatActivity.png, id=44, 344.03531pt x 609.02531pt>
 File: resources/StartChatActivity.png Graphic file (type png)
 
 <use resources/StartChatActivity.png>
-Package pdftex.def Info: resources/StartChatActivity.png used on input line 71.
+Package pdftex.def Info: resources/StartChatActivity.png used on input line 77.
 
 (pdftex.def)             Requested size: 120.41415pt x 213.16205pt.
- [9 <./resources/HomeActivity.png>]
-<resources/ChatActivity.png, id=45, 1445.4pt x 782.925pt>
+ [10 <./resources/HomeActivity.png>]
+<resources/ChatActivity.png, id=49, 677.53125pt x 608.2725pt>
 File: resources/ChatActivity.png Graphic file (type png)
 
 <use resources/ChatActivity.png>
-Package pdftex.def Info: resources/ChatActivity.png used on input line 76.
-(pdftex.def)             Requested size: 505.89758pt x 274.02785pt.
+Package pdftex.def Info: resources/ChatActivity.png used on input line 85.
+(pdftex.def)             Requested size: 237.13948pt x 212.89856pt.
+ [11 <./resources/StartChatActivity.png>]
+<resources/ChatDisplayActivity.png, id=53, 722.7pt x 602.25pt>
+File: resources/ChatDisplayActivity.png Graphic file (type png)
 
-Overfull \hbox (160.89758pt too wide) in paragraph at lines 76--77
-[][] 
- []
-
-[10 <./resources/StartChatActivity.png>]
-
-LaTeX Warning: File `ChatDisplayActivity.png' not found on input line 81.
-
-
-! Package pdftex.def Error: File `ChatDisplayActivity.png' not found.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.81 ...phics[scale=0.35]{ChatDisplayActivity.png}
-                                                  
-Using draft setting for this image.
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-[11 <./resources/ChatActivity.png>] [12]
+<use resources/ChatDisplayActivity.png>
+Package pdftex.def Info: resources/ChatDisplayActivity.png used on input line 9
+5.
+(pdftex.def)             Requested size: 252.94878pt x 210.79065pt.
+ [12 <./resources/ChatActivity.png>]
+[13 <./resources/ChatDisplayActivity.png>] [14]
 Chapter 3.
-[13
+<resources/blocks.png, id=65, 458.46281pt x 610.53094pt>
+File: resources/blocks.png Graphic file (type png)
+
+<use resources/blocks.png>
+Package pdftex.def Info: resources/blocks.png used on input line 117.
+(pdftex.def)             Requested size: 160.46439pt x 213.68903pt.
+ [15
 
 ]
+<resources/ColourScheme.png, id=69, 752.8125pt x 150.5625pt>
+File: resources/ColourScheme.png Graphic file (type png)
+
+<use resources/ColourScheme.png>
+Package pdftex.def Info: resources/ColourScheme.png used on input line 126.
+(pdftex.def)             Requested size: 263.48831pt x 52.69765pt.
+ [16 <./resources/blocks.png> <./resources/ColourScheme.png>] <resources/logo.p
+ng, id=74, 377.91188pt x 298.11375pt>
+File: resources/logo.png Graphic file (type png)
+
+<use resources/logo.png>
+Package pdftex.def Info: resources/logo.png used on input line 134.
+(pdftex.def)             Requested size: 132.27113pt x 104.34137pt.
+
+<resources/iconset.png, id=75, 648.92438pt x 137.01187pt>
+File: resources/iconset.png Graphic file (type png)
+
+<use resources/iconset.png>
+Package pdftex.def Info: resources/iconset.png used on input line 142.
+(pdftex.def)             Requested size: 227.12692pt x 47.95486pt.
+ [17 <./resources/logo.png> <./resources/iconset.png>]
 Chapter 4.
-[14
+[18
 
-]
-Chapter 5.
-[15
-
-]
+] [19] [20] [21]
 Appendix A.
-[16
-
-]
-Appendix B.
 (c:/texlive/2015/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 130.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 193.
 
 
 (c:/texlive/2015/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 130.
-
-
-LaTeX Warning: Float too large for page by 493.74281pt on input line 234.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 193.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[17
 
-] [18] (./Report.aux) ) 
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: Float too large for page by 493.63168pt on input line 337.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[22
+
+] [23] [24] (./Report.aux) ) 
 Here is how much of TeX's memory you used:
- 3021 strings out of 493054
- 42893 string characters out of 6138326
- 483306 words of memory out of 5000000
- 6520 multiletter control sequences out of 15000+600000
+ 3074 strings out of 493054
+ 44031 string characters out of 6138326
+ 565637 words of memory out of 5000000
+ 6568 multiletter control sequences out of 15000+600000
  9443 words of font info for 34 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,6n,42p,1840b,1280s stack positions out of 5000i,500n,10000p,200000b,80000s
-<c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmbx10.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12
-.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/t
-exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/201
-5/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2015/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2015/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmtt10.pfb><c:/texlive/2015/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmtt8.pfb>
-Output written on Report.pdf (19 pages, 294464 bytes).
+ 37i,6n,42p,1868b,1341s stack positions out of 5000i,500n,10000p,200000b,80000s
+<c:/texlive/2015/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmbx10.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mbx12.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
+<c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texliv
+e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2015/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2015/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmtt8.pfb>
+Output written on Report.pdf (25 pages, 542396 bytes).
 PDF statistics:
- 105 PDF objects out of 1000 (max. 8388607)
- 69 compressed objects within 1 object stream
+ 130 PDF objects out of 1000 (max. 8388607)
+ 79 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 51 words of extra memory for PDF output out of 10000 (max. 10000000)
 
